@@ -1,3 +1,5 @@
+#define NEED_ARGS
+
 #include<stdio.h>
 #include<string.h>
 #include<unistd.h>
@@ -45,16 +47,19 @@ void wrt(int sock, char *cmds, char *reason)
 	dealloc("char", 512, cmds);
 }
 
-char *rd(int sock, char *reason)
+int rd(int sock, char *cmdr, char *reason)
 {
-	char *cmdr=alloc("char", 512);
+	int stat=read(sock, cmdr, 512);
 
-	if(read(sock, cmdr, 512)<0){
+	if(stat<0){
 		fprintf(stderr, "[-]Error in reading for %s: %s\n",
 			reason, strerror(errno));
 		dealloc("char", 512, cmdr);
 		cmdr=NULL;
 	}
+	else if(stat==0){
+		fprintf(stderr, "[-]Read an empty buffer...\n");
+	}
 
-	return cmdr;
+	return stat;
 }

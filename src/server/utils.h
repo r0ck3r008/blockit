@@ -9,6 +9,6 @@
 #endif
 
 void wrt(int, char *, char *);
-char *rd(int, char *);
+int rd(int, char *, char *);
 
 #endif
