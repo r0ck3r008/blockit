@@ -8,6 +8,7 @@
 
 #include"uds_workings.h"
 #include"utils.h"
+#include"mem_mgr.h"
 
 int sock_create(char *addr)
 {
@@ -71,6 +72,29 @@ void *uds_workings(void *a)
 void *uds_cli_run(void *a)
 {
 	int sock=*(int *)a;
+	char *cmdr=NULL;
 
 	//work_loop
+	for(int exit_flag=0; ;){
+		cmdr=alloc("char", 512);
+		if(rd(sock, cmdr, "Read from client")<=0){
+			goto loop_end;
+		}
+
+		if(!sprintf(cmdr, "update")){
+			//update code
+		}
+		else if(!sprintf(cmdr, "exit")){
+			exit_flag=1;
+		}
+
+loop_end:
+		dealloc("char", 512, cmdr);
+		if(exit_flag){
+			break;
+		}
+	}
+
+	close(sock);
+	pthread_exit(NULL);
 }
