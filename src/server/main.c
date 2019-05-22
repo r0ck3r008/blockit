@@ -4,6 +4,7 @@
 #include<string.h>
 #include<pthread.h>
 #include<unistd.h>
+#include<curl/curl.h>
 #include<errno.h>
 
 #include"utils.h"
@@ -17,6 +18,7 @@ int main(int argc, char *argv[])
 		_exit(-1);
 	}
 
+	//start uds server
 	int stat;
 	pthread_t uds_tid;
 	if((stat=pthread_create(&uds_tid, NULL, uds_workings,
@@ -24,6 +26,13 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "\n[-]Error in creating UDS thread: %s\n",
 			strerror(errno));
 		goto exit;
+	}
+
+	//start curl
+	if(curl_global_init(CURL_GLOBAL_ALL)!=0){
+		fprintf(stderr, "[-]Error in initiating the libcurl,\
+		exiting now...\n");
+		_exit(-1);
 	}
 
 exit:
