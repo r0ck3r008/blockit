@@ -9,6 +9,7 @@
 #include"uds_workings.h"
 #include"utils.h"
 #include"mem_mgr.h"
+#include"transfer_utils.h"
 
 int sock_create(char *addr)
 {
@@ -81,10 +82,12 @@ void *uds_cli_run(void *a)
 			goto loop_end;
 		}
 
-		if(!sprintf(cmdr, "update")){
-			//update code
+		if(strstr(cmdr, "update")!=NULL){
+			char *cmd=strtok(cmdr, ":");
+			char *url=strtok(NULL, ":");
+			fetch(url);
 		}
-		else if(!sprintf(cmdr, "exit")){
+		else if(!strcmp(cmdr, "exit")){
 			exit_flag=1;
 		}
 
