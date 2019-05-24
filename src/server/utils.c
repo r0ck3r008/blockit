@@ -12,10 +12,8 @@ int init_args(struct arg *arguments, int argc, char **argv)
 {
 	add_argument(arguments, "-u", "--uds_path",
 		"The UDS path for server", 1);
-	add_argument(arguments, "-m", "--mirrorlist",
-		"The mirrorlist to fetch blocklists from", 1);
 
-	if(argc!=3){
+	if(argc!=2){
 		show_help(arguments);
 		clean(arguments);
 		return 1;
