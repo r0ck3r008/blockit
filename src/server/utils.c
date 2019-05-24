@@ -48,16 +48,21 @@ void wrt(int sock, char *cmds, char *reason)
 int rd(int sock, char *cmdr, char *reason)
 {
 	int stat=read(sock, cmdr, 512);
+	int flag=0;
 
 	if(stat<0){
 		fprintf(stderr, "[-]Error in reading for %s: %s\n",
 			reason, strerror(errno));
-		dealloc("char", 512, cmdr);
-		cmdr=NULL;
+		flag=1;
 	}
 	else if(stat==0){
 		fprintf(stderr, "[-]Read an empty buffer...\n");
+		flag=1;
 	}
 
+	if(flag){
+		dealloc("char", 512, cmdr);
+		cmdr=NULL;
+	}
 	return stat;
 }
