@@ -2,8 +2,7 @@
 #define UDS_WORKINGS_H
 
 int sock_create(char *);
-void uds_workings(char *, char *);
+void uds_workings(char *);
 int wrt(int, char *, char *);
-int rd(int, char *, char *);
 
 #endif
