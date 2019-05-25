@@ -13,7 +13,7 @@ int init_args(struct arg *arguments, int argc, char **argv)
 	add_argument(arguments, "-u", "--uds_path",
 		"The UDS path for server", 1);
 
-	if(argc!=2){
+	if(argc!=3){
 		show_help(arguments);
 		clean(arguments);
 		return 1;
