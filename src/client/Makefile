@@ -1,6 +1,6 @@
-COMPILER=gcc
-LINKER_FLAGS= -lcargparse -Lcargparse/src
-ALL_OBJS= main.o mem_mgr.o uds_workings.o utils.o
+COMPILER := gcc
+LINKER_FLAGS := -lcargparse -Lcargparse/src
+ALL_OBJS := main.o mem_mgr.o uds_workings.o utils.o
 
 all: client_bin clean_objs
 

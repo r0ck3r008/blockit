@@ -1,6 +1,6 @@
-COMPILER=gcc
-LINKER_FLAGS= -pthread -lcurl -lcargparse -Lcargparse/src
-ALL_OBJS= main.o mem_mgr.o transfer_utils.o uds_workings.o utils.o
+COMPILER := gcc
+LINKER_FLAGS := -pthread -lcurl -lcargparse -Lcargparse/src
+ALL_OBJS := main.o mem_mgr.o transfer_utils.o uds_workings.o utils.o
 
 all: server_bin clean_objs
 
