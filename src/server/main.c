@@ -14,9 +14,7 @@ int main(int argc, char *argv[])
 {
 	//start parser lib
 	struct arg *arguments=init_lib();
-	if(init_args(arguments, argc, argv)){
-		_exit(-1);
-	}
+	init_args(arguments, argc, argv);
 
 	//start uds server
 	int stat;
