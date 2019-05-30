@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 	int stat;
 	pthread_t uds_tid;
 	if((stat=pthread_create(&uds_tid, NULL, uds_workings,
-				find_arg(arguments, "-u")))!=0){
+				find_arg_val(arguments, "uds_path")))!=0){
 		fprintf(stderr, "\n[-]Error in creating UDS thread: %s\n",
 			strerror(errno));
 		goto exit;
