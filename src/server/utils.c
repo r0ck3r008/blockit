@@ -8,19 +8,17 @@
 #include"utils.h"
 #include"mem_mgr.h"
 
-int init_args(struct arg *arguments, int argc, char **argv)
+void init_args(struct arg *arguments, int argc, char **argv)
 {
 	add_argument(arguments, "-u", "--uds_path",
 		"The UDS path for server", 1);
 
 	if(argc!=3){
 		show_help(arguments);
-		clean(arguments);
-		return 1;
+		_exit(-1);
 	}
 
 	parse_args(arguments, argc, argv);
-	return 0;
 }
 
 char *find_arg(struct arg *arguments, char *s_name)
