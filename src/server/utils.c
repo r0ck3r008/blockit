@@ -27,9 +27,9 @@ char *find_arg(struct arg *arguments, char *s_name)
 {
 	char *ret=NULL;
 	struct arg *curr=arguments;
-	for(curr; curr->nxt!=NULL || !strcmp(curr->s_name, s_name);
-		curr=curr->nxt){
-		ret=curr->value;
+	for(curr; curr->nxt!=NULL; curr=curr->nxt){
+		if(!strcmp(curr->s_name, s_name))
+			ret=curr->value;
 	}
 
 	return ret;
