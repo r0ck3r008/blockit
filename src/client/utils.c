@@ -2,22 +2,22 @@
 
 #include<stdio.h>
 #include<string.h>
+#include<unistd.h>
 
 #include"utils.h"
 
-int init_args(struct arg *arguments, int argc, char **argv)
+void init_args(struct arg *arguments, int argc, char **argv)
 {
 	add_argument(arguments, "-s", "--sock_uds", "The URI of uds socket",
 			1);
 
 	if(argc!=3){
-		fprintf(stderr, "[!]Insufficient args\n");
 		show_help(arguments);
+		_exit(-1);
 	}
 
 	parse_args(arguments, argc, argv);
 
-	return 0;
 }
 
 char *find_arg(struct arg *arguments, char *s_name)
