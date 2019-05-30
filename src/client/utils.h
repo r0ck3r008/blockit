@@ -4,7 +4,6 @@
 #ifdef NEED_ARGS
 	#include"cargparse/cargparse.h"
 	void init_args(struct arg *, int, char **);
-	char *find_arg(struct arg *, char *);
 #endif
 
 #endif

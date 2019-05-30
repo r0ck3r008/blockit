@@ -8,8 +8,8 @@
 
 void init_args(struct arg *arguments, int argc, char **argv)
 {
-	add_argument(arguments, "-s", "--sock_uds", "The URI of uds socket",
-			1);
+	add_argument(arguments, "-u", "--uds_sock", "uds_sock",
+			"The URI of uds socket", 1);
 
 	if(argc!=3){
 		show_help(arguments);
@@ -18,24 +18,4 @@ void init_args(struct arg *arguments, int argc, char **argv)
 
 	parse_args(arguments, argc, argv);
 
-}
-
-char *find_arg(struct arg *arguments, char *s_name)
-{
-	struct arg *curr=arguments;
-	int flag;
-
-	for(flag=0; ;){
-		if(!strcmp(curr->s_name, s_name)){
-			flag=1;
-			break;
-		}
-		curr=curr->nxt;
-	}
-
-	if(flag){
-		return curr->value;
-	}else{
-		return NULL;
-	}
 }
