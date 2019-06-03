@@ -13,7 +13,8 @@
 
 int sock_create(char *addr)
 {
-	int sock=-1;
+	int sock;
+	int close_flg=0;
 	if((sock=socket(AF_UNIX, SOCK_STREAM, 0))<0){
 		fprintf(stderr, "[-]Error in creating UDS socket: %s\n",
 			strerror(errno));
@@ -23,6 +24,7 @@ int sock_create(char *addr)
 	if(unlink(addr)<0 && errno!=2){
 		fprintf(stderr, "[-]Error in unlinking the address: %s\n",
 			strerror(errno));
+		close_flg=1;
 		goto exit;
 	}
 
@@ -34,9 +36,21 @@ int sock_create(char *addr)
 	if(bind(sock, (struct sockaddr *)&addr_un, SUN_LEN(&addr_un))<0){
 		fprintf(stderr, "[-]Error in binding the UDS server sock: %s\n",
 			strerror(errno));
+		close_flg=1;
+		goto exit;
+	}
+
+	if(listen(sock, 5)<0){
+		fprintf(stderr, "[-]Error in listening on the socket: %s\n",
+			strerror(errno));
+		close_flg=1;
 	}
 
 exit:
+	if(close_flg){
+		close(sock);
+		sock=-1;
+	}
 	return sock;
 }
 
@@ -49,6 +63,9 @@ void *uds_workings(void *a)
 
 	char *addr=a;
 	int uds_sock=sock_create(addr);
+	if(uds_sock==-1){
+		goto exit;
+	}
 
 	//server loop
 	pthread_t tid[10];
@@ -68,6 +85,8 @@ void *uds_workings(void *a)
 
 		i++;
 	}
+exit:
+	pthread_exit(NULL);
 }
 
 void *uds_cli_run(void *a)
