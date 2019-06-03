@@ -15,13 +15,15 @@ int sock_create(char *addr)
 {
 	int sock;
 	int close_flg=0;
+
 	if((sock=socket(AF_UNIX, SOCK_STREAM, 0))<0){
-		fprintf(stderr, "[-]Error in creating UDS socket: %s\n",
+		fprintf(stderr, "[-]Error in creating socket: %s\n",
 			strerror(errno));
 		goto exit;
 	}
 
-	if(unlink(addr)<0 && errno!=2){
+	int stat=unlink(addr);
+	if(stat<0 && errno!=2){
 		fprintf(stderr, "[-]Error in unlinking the address: %s\n",
 			strerror(errno));
 		close_flg=1;
@@ -29,23 +31,22 @@ int sock_create(char *addr)
 	}
 
 	struct sockaddr_un addr_un;
-	explicit_bzero(&addr, SUN_LEN(&addr_un));
+	explicit_bzero(&addr_un, SUN_LEN(&addr_un));
 	addr_un.sun_family=AF_UNIX;
-	strcpy(addr_un.sun_path, addr);
+	strncpy(addr_un.sun_path, addr, sizeof(addr_un.sun_path)-1);
 
 	if(bind(sock, (struct sockaddr *)&addr_un, SUN_LEN(&addr_un))<0){
-		fprintf(stderr, "[-]Error in binding the UDS server sock: %s\n",
-			strerror(errno));
+		fprintf(stderr, "[-]Error in binding to: %s\n",
+			addr);
 		close_flg=1;
 		goto exit;
 	}
 
 	if(listen(sock, 5)<0){
-		fprintf(stderr, "[-]Error in listening on the socket: %s\n",
+		fprintf(stderr, "[-]Error in listening: %s\n",
 			strerror(errno));
 		close_flg=1;
 	}
-
 exit:
 	if(close_flg){
 		close(sock);
