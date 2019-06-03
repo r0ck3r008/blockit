@@ -61,7 +61,7 @@ void uds_workings(char *addr)
 			printf("[!]Help\n1) Update: update:<mirrorlist_file>\n\
 				2) Exit: exit\n");
 		}else{
-			printf("[!]Invalid input... retry!");
+			printf("[!]Invalid input... retry!\n");
 		}
 
 exit_loop:
