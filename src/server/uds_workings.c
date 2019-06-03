@@ -47,6 +47,7 @@ int sock_create(char *addr)
 			strerror(errno));
 		close_flg=1;
 	}
+
 exit:
 	if(close_flg){
 		close(sock);
@@ -67,6 +68,7 @@ void *uds_workings(void *a)
 	if(uds_sock==-1){
 		goto exit;
 	}
+	printf("[!]Successfullly listening on %s\n", addr);
 
 	//server loop
 	pthread_t tid[10];
@@ -83,6 +85,7 @@ void *uds_workings(void *a)
 				i, strerror(errno));
 			continue;
 		}
+		printf("[!]Accepted and forked a new client %d\n", i);
 
 		i++;
 	}
