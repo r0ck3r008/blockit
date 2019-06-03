@@ -1,2 +1,2 @@
-src/client/client_bin
-src/server/server_bin
+src/bin/client.bin
+src/bin/server.bin
