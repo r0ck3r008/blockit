@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	if((stat=pthread_create(&uds_tid, NULL, uds_workings,
 				find_arg_val(arguments, "uds_path")))!=0){
 		fprintf(stderr, "\n[-]Error in creating UDS thread: %s\n",
-			strerror(errno));
+			strerror(stat));
 		goto exit;
 	}
 
@@ -33,6 +33,10 @@ int main(int argc, char *argv[])
 		_exit(-1);
 	}
 
+	if((stat=pthread_join(uds_tid, NULL))!=0){
+		fprintf(stderr, "[-]Error in joining to uds thread: %s\n",
+			strerror(stat));
+	}
 exit:
 	//clean cargparse lib
 	clean(arguments);
