@@ -27,6 +27,7 @@ int sock_create(char *addr)
 			addr, strerror(errno));
 		sock=-1;
 	}
+	printf("[!]Connection successful to %s!\n", addr);
 exit:
 	return sock;
 }
