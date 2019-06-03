@@ -6,7 +6,7 @@ ALL_OBJS := main.o mem_mgr.o uds_workings.o utils.o
 all: client_bin clean_objs
 
 client_bin: ${ALL_OBJS}
-	${COMPILER} ${LINKER_FLAGS} ${ALL_OBJS} -o client_bin
+	${COMPILER} ${LINKER_FLAGS} ${ALL_OBJS} -o client.bin
 main.o: main.c
 	${COMPILER} ${COMPILER_FLAGS} main.c
 
@@ -22,5 +22,8 @@ utils.o: utils.c utils.h
 clean_objs:
 	rm ${ALL_OBJS}
 
+place: ./client.bin
+	mv ./client.bin ../bin
+
 clean:
-	rm ./client_bin
+	rm ../bin/client.bin
