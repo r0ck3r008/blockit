@@ -1,33 +1,25 @@
 COMPILER := gcc
 LINKER_FLAGS := -pthread -lcurl -lcargparse -Lcargparse/src
-COMPILER_FLAGS := -g -c
-ALL_OBJS := main.o mem_mgr.o transfer_utils.o uds_workings.o utils.o
-
+MISC := misc/main.o misc/mem_mgr.o misc/utils.o
+NET := net/transfer_utils.o net/uds_workings.o
+ALL_OBJS := ${MISC} ${NET}
 all: server_bin clean_objs
 
-server_bin: ${ALL_OBJS}
+server_bin: misc_tgt net_tgt
 	${COMPILER} ${LINKER_FLAGS} ${ALL_OBJS} -o server.bin
 
-main.o: main.c
-	${COMPILER} ${COMPILER_FLAGS} main.c
+misc_tgt:
+	make -C misc/
 
-mem_mgr.o: mem_mgr.c mem_mgr.h
-	${COMPILER} ${COMPILER_FLAGS} mem_mgr.c
-
-transfer_utils.o: transfer_utils.c transfer_utils.h
-	${COMPILER} ${COMPILER_FLAGS} transfer_utils.c
-
-uds_workings.o: uds_workings.c uds_workings.h
-	${COMPILER} ${COMPILER_FLAGS} uds_workings.c
-
-utils.o: utils.c utils.h
-	${COMPILER} ${COMPILER_FLAGS} utils.c
+net_tgt:
+	make -C net/
 
 place: ./server.bin
 	mv ./server.bin ../bin
 
 clean_objs:
-	rm ${ALL_OBJS}
+	make -C misc/ clean
+	make -C net/ clean
 
 clean:
 	rm ../bin/server.bin
