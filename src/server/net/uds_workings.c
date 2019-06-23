@@ -7,8 +7,8 @@
 #include<errno.h>
 
 #include"uds_workings.h"
-#include"utils.h"
-#include"mem_mgr.h"
+#include"misc/utils.h"
+#include"misc/mem_mgr.h"
 #include"transfer_utils.h"
 
 int sock_create(char *addr)
