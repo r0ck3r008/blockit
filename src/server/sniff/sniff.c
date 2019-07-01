@@ -8,7 +8,7 @@
 #include<netinet/ip.h>
 #include<pcap/pcap.h>
 
-#include"misc/mem_mgr.h"
+#include"mem/mem_mgr.h"
 #include"sniff.h"
 
 void callbk_fn(u_char *arg, const struct pcap_pkthdr *hdr,
