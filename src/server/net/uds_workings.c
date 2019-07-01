@@ -8,7 +8,7 @@
 
 #include"uds_workings.h"
 #include"misc/utils.h"
-#include"misc/mem_mgr.h"
+#include"mem/mem_mgr.h"
 #include"transfer_utils.h"
 
 int sock_create(char *addr)
