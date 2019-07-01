@@ -6,7 +6,7 @@
 #include<errno.h>
 
 #include"utils.h"
-#include"mem_mgr.h"
+#include"mem/mem_mgr.h"
 
 void init_args(struct arg *arguments, int argc, char **argv)
 {
