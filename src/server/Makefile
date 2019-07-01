@@ -1,7 +1,8 @@
 COMPILER := gcc
 LINKER_FLAGS := -pthread -lcurl -lcargparse -Lcargparse/src
-MISC := misc/main.o misc/mem_mgr.o misc/utils.o
+MISC := misc/main.o  misc/utils.o
 NET := net/transfer_utils.o net/uds_workings.o
+MEM := mem/mem_mgr.o
 ALL_OBJS := ${MISC} ${NET}
 all: server_bin clean_objs
 
@@ -14,12 +15,16 @@ misc_tgt:
 net_tgt:
 	make -C net/
 
+mem_tgt:
+	make -C mem/
+
 place: ./server.bin
 	mv ./server.bin ../bin
 
 clean_objs:
 	make -C misc/ clean
 	make -C net/ clean
+	make -C mem/ clean
 
 clean:
 	rm ../bin/server.bin
