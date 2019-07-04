@@ -2,12 +2,7 @@
 #define MEM_MGR_H
 
 #ifdef NEEDS_LIST
-	struct node
-	{
-		char *ip;
-		struct node *nxt;
-		struct node *prev;
-	};
+
 	struct node *alloc_node(char *);
 	void dealloc_node(struct node *);
 	void add_node(struct node *, struct node *);
