@@ -38,23 +38,15 @@ int h_map_find(struct node **h_map, char *ip, int rows)
 
 int h_map_key(char *ip, int rows)
 {
-	char *ip_final=alloc("char", 20);
-	sprintf(ip_final, "");
+	int count=0;
+	char *ptr=ip;
 
-	for(int i=0; i<4; i++){
-		char *ip_part;
-		if(!i){
-			ip_part=strtok(ip, ".");
-		} else{
-			ip_part=strtok(NULL, ".");
-		}
-
-		strcat(ip_final, ip_part);
+	while(*ptr!='\0'){
+		count+=(int)*ptr;
+		ptr+=sizeof(char);
 	}
 
-	int ip_num=(int)strtol(ip_final, NULL, 10);
-	dealloc("char", 20, ip_final);
-	return ip_num%rows;
+	return count%rows;
 }
 
 void h_map_clean(struct node **h_map, int rows)
