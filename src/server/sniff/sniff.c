@@ -6,7 +6,6 @@
 #include<arpa/inet.h>
 #include<net/ethernet.h>
 #include<netinet/ip.h>
-#include<pcap/pcap.h>
 
 #include"mem/mem_mgr.h"
 #include"sniff.h"
@@ -125,20 +124,4 @@ int compile_fltr(pcap_t *handle, char *fltr_exp)
 
 	printf("[!]Expression compiled and applied: %s\n", fltr_exp);
 	return 0;
-}
-
-int main(int argc, char *argv[])
-{
-	pcap_t *handle;
-	if((handle=get_handle(argv[1]))==NULL){
-		_exit(-1);
-	}
-
-	if(compile_fltr(handle, argv[2])){
-		_exit(-1);
-	}
-
-	if(pcap_loop(handle, -1, callbk_fn, NULL)){
-		fprintf(stderr, "[-]Breaking the capturing process\n");
-	}
 }
