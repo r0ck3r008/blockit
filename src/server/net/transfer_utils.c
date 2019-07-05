@@ -1,14 +1,49 @@
-#include<stdio.h>
-#include<stdlib.h>
 #include<string.h>
+#include<errno.h>
+#include<unistd.h>
+#include<sys/types.h>
+#include<regex.h>
 #include<curl/curl.h>
 
 #include"transfer_utils.h"
 
 size_t callback_func(void *buf)
 {
-	//TODO find a method to store and parse this data
+	//TODO check why callback function cannot handle splitting
+	//and regex checking
+	char *ptr=strtok(buf, "\n");
+	while(ptr!=NULL){
+		if(regex_chk(ptr)){
+			printf("%s\n", ptr);
+		}
+		ptr=strtok(NULL, "\n");
+	}
+
 	return strlen(buf);
+}
+
+int regex_chk(char *str)
+{
+	int stat, ret=0;
+	regex_t reg;
+
+	stat=regcomp(&reg, "^[#\n]", 0);
+	if(stat!=0){
+		fprintf(stderr, "[-]Error in compiling regexp: %s\n",
+			strerror(stat));
+		goto exit;
+	}
+
+	stat=regexec(&reg, str, 0, NULL, 0);
+	if(stat==REG_NOMATCH){
+		ret=1;
+	}
+
+exit:
+
+	if(!ret)
+		regfree(&reg);
+	return ret;
 }
 
 void fetch(char *m_url)
