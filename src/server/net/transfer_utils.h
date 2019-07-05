@@ -1,8 +1,7 @@
 #ifndef TRANSFER_UTILS_H
 #define TRANSFER_UTILS_H
 
-size_t callback_func(void *);
-int regex_chk(char *);
-void fetch(char *);
+FILE *openf(char *);
+char *fetch(char *);
 
 #endif
