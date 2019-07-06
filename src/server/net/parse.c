@@ -31,16 +31,13 @@ int process_rd_buf(char **rd_buf_ptr)
 	char *line, *line_bk=NULL;
 	int size=200;
 
-	if(!strcmp(*rd_buf_ptr, "\n")){
+	if(!strcmp(*rd_buf_ptr, "\n"))
 		return size;
-	}
 
 	line=strtok(*rd_buf_ptr, "\n");
 	while(line!=NULL){
-		if(regex_chk(line)){
-			printf("%s\n",
-			       line);
-		}
+		if(regex_chk(line))
+			process_line(line);
 		line_bk=line;
 		line=strtok(NULL, "\n");
 	}
@@ -49,6 +46,13 @@ int process_rd_buf(char **rd_buf_ptr)
 	sprintf(*rd_buf_ptr, "%s", line_bk);
 
 	return (size-strlen(line_bk));
+}
+
+void process_line(char *line)
+{
+	char *part=strtok(line, " ");
+	part=strtok(NULL, " ");
+	printf("%s\n", part);
 }
 
 int regex_chk(char *str)
