@@ -22,7 +22,8 @@ void file_handle(char *fname)
 	int size;
 	while(rd_buf!=NULL){
 		size=process_rd_buf(&rd_buf);
-		rd_buf=fgets(rd_buf, size*sizeof(char), f);
+		rd_buf=fgets(rd_buf+(sizeof(char)*(200-size)),
+				size*sizeof(char), f);
 	}
 }
 
