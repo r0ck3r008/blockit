@@ -1,7 +1,7 @@
 #ifndef TRANSFER_UTILS_H
 #define TRANSFER_UTILS_H
 
-FILE *openf(char *);
-char *fetch(char *);
+void fetch(char *);
+void fork_n_sniff(char *);
 
 #endif
