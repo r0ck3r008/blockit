@@ -16,6 +16,13 @@ int main(int argc, char *argv[])
 	struct arg *arguments=init_lib();
 	init_args(arguments, argc, argv);
 
+	//start curl
+	if(curl_global_init(CURL_GLOBAL_ALL)!=0){
+		fprintf(stderr, "[-]Error in initiating the libcurl,\
+		exiting now...\n");
+		_exit(-1);
+	}
+
 	//start uds server
 	int stat;
 	pthread_t uds_tid;
@@ -24,13 +31,6 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "\n[-]Error in creating UDS thread: %s\n",
 			strerror(stat));
 		goto exit;
-	}
-
-	//start curl
-	if(curl_global_init(CURL_GLOBAL_ALL)!=0){
-		fprintf(stderr, "[-]Error in initiating the libcurl,\
-		exiting now...\n");
-		_exit(-1);
 	}
 
 	if((stat=pthread_join(uds_tid, NULL))!=0){
