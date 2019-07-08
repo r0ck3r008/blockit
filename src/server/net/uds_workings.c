@@ -1,3 +1,5 @@
+#define NEED_ARGS
+
 #include<stdio.h>
 #include<string.h>
 #include<sys/socket.h>
@@ -63,7 +65,9 @@ void *uds_workings(void *a)
 		pthread_exit(NULL);
 	}
 
-	char *addr=a;
+	char *addr;
+	if(arguments_glbl!=NULL)
+		addr=find_arg_val(arguments_glbl, "uds_sock");
 	int uds_sock=sock_create(addr);
 	if(uds_sock==-1){
 		goto exit;
@@ -106,8 +110,7 @@ void *uds_cli_run(void *a)
 		}
 
 		if(strstr(cmdr, "update")!=NULL){
-			char *cmd=strtok(cmdr, ":");
-			char *url=strtok(NULL, ":");
+			char *url=fetch_url();
 			fetch(url);
 		}
 		else if(!strcmp(cmdr, "exit")){
