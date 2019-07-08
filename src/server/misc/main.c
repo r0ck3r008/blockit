@@ -9,6 +9,7 @@
 
 #include"utils.h"
 #include"net/uds_workings.h"
+#include"net/transfer_utils.h"
 
 int main(int argc, char *argv[])
 {
@@ -23,11 +24,17 @@ int main(int argc, char *argv[])
 		_exit(-1);
 	}
 
+	arguments_glbl=NULL;
+
+	//init sniffer proc
+	char *url=fetch_url();
+	fetch(url);
+
 	//start uds server
 	int stat;
 	pthread_t uds_tid;
 	if((stat=pthread_create(&uds_tid, NULL, uds_workings,
-				find_arg_val(arguments, "uds_path")))!=0){
+				NULL))!=0){
 		fprintf(stderr, "\n[-]Error in creating UDS thread: %s\n",
 			strerror(stat));
 		goto exit;
