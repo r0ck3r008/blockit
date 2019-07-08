@@ -1,14 +1,40 @@
-#include<stdio.h>
+#define NEED_ARGS
+
+#include<stdlib.h>
 #include<string.h>
-#include<unistd.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
 #include<arpa/inet.h>
 #include<net/ethernet.h>
 #include<netinet/ip.h>
+#include<unistd.h>
 
 #include"mem/mem_mgr.h"
+#include"misc/utils.h"
 #include"sniff.h"
+
+void init_sniff(struct h_map_t *h_map)
+{
+	char *iface, *exp;
+	if(arguments_glbl!=NULL){
+		iface=find_arg_val(arguments_glbl, "iface");
+		exp=find_arg_val(arguments_glbl, "expr");
+	} else{
+		fprintf(stderr, "[!]Empty arguments received!\n");
+		_exit(-1);
+	}
+
+	pcap_t *handle;
+	if((handle=get_handle(iface))==NULL)
+		_exit(-1);
+
+	if(compile_fltr(handle, exp))
+		_exit(-1);
+
+	if(pcap_loop(handle, -1, callbk_fn, (u_char *)h_map)){
+		fprintf(stderr, "[-]Error in stating the capture process\n");
+		_exit(-1);
+	}
+
+}
 
 void callbk_fn(u_char *arg, const struct pcap_pkthdr *hdr,
 		const u_char *pkt)
@@ -74,7 +100,7 @@ pcap_if_t *find_app_dev(pcap_if_t *start, char *name)
 	return curr;
 }
 
-pcap_t *get_handle(char *argv1)
+pcap_t *get_handle(char *iface)
 {
 	char *errbuf=alloc("char", PCAP_ERRBUF_SIZE);
 	pcap_if_t *all_devs;
@@ -86,7 +112,7 @@ pcap_t *get_handle(char *argv1)
 		return NULL;
 	}
 
-	pcap_if_t *dev=find_app_dev(all_devs, argv1);
+	pcap_if_t *dev=find_app_dev(all_devs, iface);
 	if(dev==NULL){
 		goto exit;
 	}
