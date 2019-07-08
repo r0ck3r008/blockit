@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<stdlib.h>
 #include<string.h>
 #include<sys/types.h>
 #include<regex.h>
@@ -7,15 +8,12 @@
 #include"parse.h"
 #include"mem/h_map.h"
 #include"mem/mem_mgr.h"
+#include"sniff/sniff.h"
+#include"misc/utils.h"
 
 void file_handle(char *fname)
 {
-	FILE *f=NULL;
-	if((f=fopen(fname, "r"))==NULL){
-		fprintf(stderr, "[-]Error in opening file: %s\n",
-			strerror(errno));
-		return;
-	}
+	FILE *f=openf(fname, 0);
 
 	char *rd_buf=alloc("char", 200);
 	rd_buf=fgets(rd_buf, 200*sizeof(char), f);
@@ -25,6 +23,10 @@ void file_handle(char *fname)
 		rd_buf=fgets(rd_buf+(sizeof(char)*(200-size)),
 				size*sizeof(char), f);
 	}
+
+	free(rd_buf);
+
+	//TODO add a call to init_sniff with addition to h_map
 }
 
 int process_rd_buf(char **rd_buf_ptr)
@@ -78,5 +80,3 @@ exit:
 		regfree(&reg);
 	return ret;
 }
-
-
