@@ -7,31 +7,33 @@
 #include<regex.h>
 #include<errno.h>
 
-#include"parse.h"
 #include"mem/h_map.h"
 #include"mem/mem_mgr.h"
-#include"sniff/sniff.h"
 #include"misc/utils.h"
+#include"parse.h"
 
-void file_handle(char *fname)
+struct h_map_t *file_handle(char *fname)
 {
 	FILE *f=openf(fname, 0);
+
+	struct h_map_t *h_map=h_map_create(20000);
 
 	char *rd_buf=alloc("char", 200);
 	rd_buf=fgets(rd_buf, 200*sizeof(char), f);
 	int size;
 	while(rd_buf!=NULL){
-		size=process_rd_buf(&rd_buf);
+		size=process_rd_buf(&rd_buf, h_map);
 		rd_buf=fgets(rd_buf+(sizeof(char)*(200-size)),
 				size*sizeof(char), f);
 	}
 
 	free(rd_buf);
 
-	//TODO add a call to init_sniff with addition to h_map
+	return h_map;
+
 }
 
-int process_rd_buf(char **rd_buf_ptr)
+int process_rd_buf(char **rd_buf_ptr, struct h_map_t *h_map)
 {
 	char *line, *line_bk=NULL;
 	int size=200;
@@ -42,7 +44,7 @@ int process_rd_buf(char **rd_buf_ptr)
 	line=strtok(*rd_buf_ptr, "\n");
 	while(line!=NULL){
 		if(regex_chk(line))
-			process_line(line);
+			process_line(line, h_map);
 		line_bk=line;
 		line=strtok(NULL, "\n");
 	}
@@ -53,7 +55,7 @@ int process_rd_buf(char **rd_buf_ptr)
 	return (size-strlen(line_bk));
 }
 
-void process_line(char *line)
+void process_line(char *line, struct h_map_t *h_map)
 {
 	char *part=strtok(line, " ");
 	part=strtok(NULL, " ");
@@ -62,7 +64,7 @@ void process_line(char *line)
 	if(ip==NULL)
 		return;
 
-	printf("%s\n", ip);
+	h_map_insert(h_map, ip);
 	free(ip);
 }
 
