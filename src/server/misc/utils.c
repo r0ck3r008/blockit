@@ -72,8 +72,8 @@ FILE *openf(char *fname, int mode)
 	char *mode_name= mode==1 ? "w" : "r";
 	FILE *f=NULL;
 	if((f=fopen(fname, mode_name))==NULL){
-		fprintf(stderr, "[-]Error in opening file: %s\n",
-			strerror(errno));
+		fprintf(stderr, "[-]Error in opening file %s: %s\n",
+			fname, strerror(errno));
 		_exit(-1);
 	}
 
