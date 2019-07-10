@@ -2,6 +2,8 @@
 #include<stdlib.h>
 #include<string.h>
 #include<sys/types.h>
+#include<sys/socket.h>
+#include<netdb.h>
 #include<regex.h>
 #include<errno.h>
 
@@ -55,7 +57,34 @@ void process_line(char *line)
 {
 	char *part=strtok(line, " ");
 	part=strtok(NULL, " ");
-	printf("%s\n", part);
+
+	char *ip=find_ip(part);
+	if(ip==NULL)
+		return;
+
+	printf("%s\n", ip);
+	free(ip);
+}
+
+char *find_ip(char *hostname)
+{
+	//TODO despirately need to inc the spped of this function!!
+	struct addrinfo hints, *infoptr;
+	explicit_bzero(&hints, sizeof(struct addrinfo));
+	hints.ai_family=AF_INET;
+
+	int result=getaddrinfo(hostname, NULL, &hints, &infoptr);
+	if(result){
+		fprintf(stderr, "[-]Error in finding IP for %s: %s\n",
+			hostname, gai_strerror(result));
+		return NULL;
+	}
+
+	char *host=alloc("char", 512);
+	getnameinfo(infoptr->ai_addr, infoptr->ai_addrlen, host,
+		    sizeof(char)*512, NULL, 0, NI_NUMERICHOST);
+
+	return host;
 }
 
 int regex_chk(char *str)
