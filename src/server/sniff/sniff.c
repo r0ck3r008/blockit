@@ -40,6 +40,7 @@ void init_sniff(struct h_map_t *h_map)
 void callbk_fn(u_char *arg, const struct pcap_pkthdr *hdr,
 		const u_char *pkt)
 {
+	struct h_map_t *h_map=(struct h_map_t *)arg;
 	static int count=0;
 	struct ip *ip_ptr;
 	u_int len=hdr->len;
@@ -75,8 +76,11 @@ void callbk_fn(u_char *arg, const struct pcap_pkthdr *hdr,
 	//in a single printf call even though gdb inspection yeilds
 	//correct dst and src addresses with same inet_ntoa call.
 	//Also, wierdly enough, two printf calls yeild correct result
-	printf("[%d]Source: %s\t", ++count, inet_ntoa(ip_ptr->ip_src));
-	printf("Dest: %s\n", inet_ntoa(ip_ptr->ip_dst));
+//	printf("[%d]Source: %s\t", ++count, inet_ntoa(ip_ptr->ip_src));
+//	printf("Dest: %s\n", inet_ntoa(ip_ptr->ip_dst));
+	if(h_map_find(h_map, inet_ntoa(ip_ptr->ip_dst))){
+		printf("[!]Blocking %s\n", ip_ptr->ip_dst);
+	}
 }
 
 pcap_if_t *find_app_dev(pcap_if_t *start, char *name)
