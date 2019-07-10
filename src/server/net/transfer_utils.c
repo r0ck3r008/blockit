@@ -6,9 +6,11 @@
 #include<unistd.h>
 #include<curl/curl.h>
 
-#include"transfer_utils.h"
+#include"mem/h_map.h"
 #include"misc/utils.h"
 #include"parse.h"
+#include"sniff/sniff.h"
+#include"transfer_utils.h"
 
 void fetch(char *m_url)
 {
@@ -49,16 +51,15 @@ void fork_n_sniff(char *fname)
 	if(child_pid==0){
 		//child
 		sleep(1);
-		file_handle(fname);
+		struct h_map_t *h_map=file_handle(fname);
+		init_sniff(h_map);
 	} else{
 		//parent
 		if(child_pid_bk){
 			//kill prev
-			if(kill(child_pid_bk, SIGTERM)==-1){
+			if(kill(child_pid_bk, SIGTERM)==-1)
 				fprintf(stderr, "[-]Error in killing\
 					last proc: %s\n", strerror(errno));
-
-			}
 			child_pid_bk=child_pid;
 		}
 	}
