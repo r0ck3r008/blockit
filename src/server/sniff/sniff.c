@@ -16,8 +16,8 @@ void init_sniff(struct h_map_t *h_map)
 {
 	char *iface, *exp;
 	if(arguments_glbl!=NULL){
-		iface=find_arg_val(arguments_glbl, "iface");
-		exp=find_arg_val(arguments_glbl, "expr");
+		iface=find_arg_val(*arguments_glbl, "iface");
+		exp=find_arg_val(*arguments_glbl, "expr");
 	} else{
 		fprintf(stderr, "[!]Empty arguments received!\n");
 		_exit(-1);

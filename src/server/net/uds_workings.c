@@ -60,14 +60,9 @@ exit:
 
 void *uds_workings(void *a)
 {
-	if(a==NULL){
-		fprintf(stderr, "[-]Error in receving the UDS name\n");
-		pthread_exit(NULL);
-	}
-
 	char *addr;
 	if(arguments_glbl!=NULL)
-		addr=find_arg_val(arguments_glbl, "uds_sock");
+		addr=find_arg_val(*arguments_glbl, "uds_path");
 	int uds_sock=sock_create(addr);
 	if(uds_sock==-1){
 		goto exit;
