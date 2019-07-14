@@ -23,7 +23,6 @@ void init_args(struct arg *arguments, int argc, char **argv)
 	}
 
 	parse_args(arguments, argc, argv);
-	arguments_glbl=arguments;
 }
 
 void wrt(int sock, char *cmds, char *reason)
