@@ -5,7 +5,7 @@
 	#include"cargparse/cargparse.h"
 
 	void init_args(struct arg *, int, char **);
-	struct arg *arguments_glbl;
+	struct arg **arguments_glbl;
 #endif
 
 void wrt(int, char *, char *);
