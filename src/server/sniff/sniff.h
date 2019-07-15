@@ -10,5 +10,6 @@ pcap_t *get_handle(char *);
 int compile_fltr(pcap_t *, char *);
 void callbk_fn(u_char *, const struct pcap_pkthdr *,
 		const u_char *pkt);
+struct h_map_t **h_map_ptr;
 
 #endif

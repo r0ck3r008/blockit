@@ -30,17 +30,20 @@ void init_sniff(struct h_map_t *h_map)
 	if(compile_fltr(handle, exp))
 		_exit(-1);
 
-	if(pcap_loop(handle, -1, callbk_fn, (u_char *)h_map)){
+	h_map_ptr=alloc("struct h_map_t *", 1);
+	*h_map_ptr=h_map;
+	if(pcap_loop(handle, -1, callbk_fn, NULL)){
 		fprintf(stderr, "[-]Error in stating the capture process\n");
 		_exit(-1);
 	}
 
+	h_map_clean(h_map);
+	dealloc("struct h_map_t *", 1, h_map_ptr);
 }
 
 void callbk_fn(u_char *arg, const struct pcap_pkthdr *hdr,
 		const u_char *pkt)
 {
-	struct h_map_t *h_map=(struct h_map_t *)arg;
 	static int count=0;
 	struct ip *ip_ptr;
 	u_int len=hdr->len;
@@ -76,11 +79,9 @@ void callbk_fn(u_char *arg, const struct pcap_pkthdr *hdr,
 	//in a single printf call even though gdb inspection yeilds
 	//correct dst and src addresses with same inet_ntoa call.
 	//Also, wierdly enough, two printf calls yeild correct result
-//	printf("[%d]Source: %s\t", ++count, inet_ntoa(ip_ptr->ip_src));
-//	printf("Dest: %s\n", inet_ntoa(ip_ptr->ip_dst));
-	if(h_map_find(h_map, inet_ntoa(ip_ptr->ip_dst))){
-		printf("[!]Blocking %s\n", ip_ptr->ip_dst);
-	}
+	char *dst_ip=inet_ntoa(ip_ptr->ip_dst);
+	if(h_map_find(*h_map_ptr, dst_ip))
+		printf("[!]Blocking %s\n", dst_ip);
 }
 
 pcap_if_t *find_app_dev(pcap_if_t *start, char *name)
