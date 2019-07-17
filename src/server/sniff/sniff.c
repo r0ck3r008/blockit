@@ -37,8 +37,6 @@ void init_sniff(struct h_map_t *h_map)
 		_exit(-1);
 	}
 
-	h_map_clean(h_map);
-	dealloc("struct h_map_t *", 1, h_map_ptr);
 }
 
 void callbk_fn(u_char *arg, const struct pcap_pkthdr *hdr,
