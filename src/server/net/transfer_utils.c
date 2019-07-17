@@ -7,6 +7,7 @@
 #include<curl/curl.h>
 
 #include"mem/h_map.h"
+#include"mem/mem_mgr.h"
 #include"misc/utils.h"
 #include"parse.h"
 #include"sniff/sniff.h"
@@ -46,6 +47,15 @@ exit:
 	fork_n_sniff(fname);
 }
 
+void sig_callbk(int signo)
+{
+	if(signo==SIGTERM){
+		printf("[!]Ending child and cleaning cache!\n");
+		h_map_clean(*h_map_ptr);
+		dealloc("struct h_map_t *", 1, h_map_ptr);
+	}
+}
+
 void fork_n_sniff(char *fname)
 {
 	static int child_pid_bk=0;
@@ -53,6 +63,9 @@ void fork_n_sniff(char *fname)
 
 	if(child_pid==0){
 		//child
+		if(signal(SIGTERM, sig_callbk)==SIG_ERR)
+			fprintf(stderr, "[-]Error in registering signal\
+				handler\n");
 		sleep(1);
 		struct h_map_t *h_map=file_handle(fname);
 		init_sniff(h_map);
@@ -63,7 +76,7 @@ void fork_n_sniff(char *fname)
 			if(kill(child_pid_bk, SIGTERM)==-1)
 				fprintf(stderr, "[-]Error in killing\
 					last proc: %s\n", strerror(errno));
-			child_pid_bk=child_pid;
 		}
+		child_pid_bk=child_pid;
 	}
 }
