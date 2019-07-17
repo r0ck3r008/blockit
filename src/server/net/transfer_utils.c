@@ -21,6 +21,9 @@ void fetch(char *m_url)
 		_exit(-1);
 	}
 
+	if(m_url[strlen(m_url)-1]=='\n')
+		m_url[strlen(m_url)-1]='\0';
+
 	if(curl_easy_setopt(handle, CURLOPT_WRITEDATA, f)!=0){
 		fprintf(stderr, "[-]Error in setting curl_opt for\
 			callback_func\n");
