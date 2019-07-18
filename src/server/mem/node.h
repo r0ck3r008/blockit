@@ -3,6 +3,7 @@
 
 struct node{
 	char *ip;
+	int blk;
 	struct node *nxt;
 	struct node *prev;
 };
