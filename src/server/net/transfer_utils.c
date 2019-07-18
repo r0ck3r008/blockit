@@ -49,8 +49,9 @@ exit:
 
 void sig_callbk(int signo)
 {
-	if(signo==SIGTERM){
-		printf("[!]Ending child and cleaning cache!\n");
+	if(signo==SIGTERM || signo==SIGINT){
+		printf("[!]Ending child and cleaning cache on signal %d!\n",
+		       signo);
 		h_map_clean(*h_map_ptr);
 		dealloc("struct h_map_t *", 1, h_map_ptr);
 	}
@@ -65,7 +66,10 @@ void fork_n_sniff(char *fname)
 		//child
 		if(signal(SIGTERM, sig_callbk)==SIG_ERR)
 			fprintf(stderr, "[-]Error in registering signal\
-				handler\n");
+				handler SIGTERM\n");
+		if(signal(SIGINT, sig_callbk)==SIG_ERR)
+			fprintf(stderr, "[-]Error in registering signal\
+				handler SIGINT\n");
 		sleep(1);
 		struct h_map_t *h_map=file_handle(fname);
 		init_sniff(h_map);
