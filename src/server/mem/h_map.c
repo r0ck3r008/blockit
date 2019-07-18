@@ -31,6 +31,10 @@ int h_map_find(struct h_map_t *h_map, char *ip)
 	struct node *curr=find_memb(h_map->h_map[key], ip);
 	if(curr!=NULL){
 		ret=1;
+		if(curr->blk)
+			ret=2;
+		else
+			curr->blk=1;
 	}
 
 	return ret;
