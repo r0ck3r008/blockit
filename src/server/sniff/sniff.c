@@ -78,7 +78,8 @@ void callbk_fn(u_char *arg, const struct pcap_pkthdr *hdr,
 	//correct dst and src addresses with same inet_ntoa call.
 	//Also, wierdly enough, two printf calls yeild correct result
 	char *dst_ip=inet_ntoa(ip_ptr->ip_dst);
-	if(h_map_find(*h_map_ptr, dst_ip))
+	int stat=h_map_find(*h_map_ptr, dst_ip);
+	if(stat==1)
 		printf("[!]Blocking %s\n", dst_ip);
 }
 
