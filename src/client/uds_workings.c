@@ -53,13 +53,14 @@ void uds_workings(char *addr)
 				goto exit_loop;
 			}
 		}else if(strstr(cmdr, "exit")!=NULL){
-			if(wrt(uds_sock, cmdr, "Send exit command")){
+			printf("[!]Exiting now!\n");
+			if(!wrt(uds_sock, cmdr, "Send exit command")){
 				flag=1;
 				goto exit_loop;
 			}
 		}else if(strstr(cmdr, "?")!=NULL){
-			printf("[!]Help\n1) Update: update:<mirrorlist_file>\n\
-				2) Exit: exit\n");
+			printf("[!]Help\n1) update: update\n2) Exit: exit\n"
+			       );
 		}else{
 			printf("[!]Invalid input... retry!\n");
 		}
