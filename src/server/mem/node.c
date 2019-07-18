@@ -11,6 +11,7 @@ struct node *alloc_node(char *ip)
 	curr->prev=NULL;
 	curr->ip=alloc("char", 20);
 	sprintf(curr->ip, "%s", ip);
+	curr->blk=0;
 	return curr;
 }
 
