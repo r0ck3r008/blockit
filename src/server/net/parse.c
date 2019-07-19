@@ -60,33 +60,31 @@ void process_line(char *line, struct h_map_t *h_map)
 	char *part=strtok(line, " ");
 	part=strtok(NULL, " ");
 
-	char *ip=find_ip(part);
-	if(ip==NULL)
-		return;
-
-	h_map_insert(h_map, ip);
-	free(ip);
+	find_ip(part, h_map);
 }
 
-char *find_ip(char *hostname)
+void find_ip(char *hostname, struct h_map_t *h_map)
 {
 	//TODO despirately need to inc the spped of this function!!
 	struct addrinfo hints, *infoptr;
 	explicit_bzero(&hints, sizeof(struct addrinfo));
-	hints.ai_family=AF_INET;
+	hints.ai_family=AF_UNSPEC;
+	hints.ai_protocol=0;
+	hints.ai_socktype=SOCK_STREAM;
 
 	int result=getaddrinfo(hostname, NULL, &hints, &infoptr);
-	if(result){
+	if(result)
 		fprintf(stderr, "[-]Error in finding IP for %s: %s\n",
 			hostname, gai_strerror(result));
-		return NULL;
-	}
 
 	char *host=alloc("char", 512);
-	getnameinfo(infoptr->ai_addr, infoptr->ai_addrlen, host,
-		    sizeof(char)*512, NULL, 0, NI_NUMERICHOST);
-
-	return host;
+	struct addrinfo *ptr=infoptr;
+	for(ptr; ptr!=NULL; ptr=ptr->ai_next){
+		getnameinfo(infoptr->ai_addr, infoptr->ai_addrlen, host,
+			    sizeof(char)*512, NULL, 0, NI_NUMERICHOST);
+		h_map_insert(h_map, host);
+		explicit_bzero(host, sizeof(char)*512);
+	}
 }
 
 int regex_chk(char *str)
