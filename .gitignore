@@ -1,0 +1,5 @@
+src/bin/client.bin
+src/bin/server.bin
+src/server/mem/main*
+src/server/sniff/main*
+src/server/net/main*
