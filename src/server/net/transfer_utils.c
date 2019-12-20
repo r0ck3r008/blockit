@@ -51,7 +51,7 @@ void sig_callbk(int signo)
 {
 	if(signo==SIGTERM || signo==SIGINT){
 		printf("[!]Ending child and cleaning cache on signal %d!\n",
-		       signo);
+			signo);
 		h_map_clean(*h_map_ptr);
 		dealloc("struct h_map_t *", 1, h_map_ptr);
 	}
